@@ -20,6 +20,7 @@ public class UserDA {
 	
 /*这里是数据库的初始化以及关闭数据库的函数，准备使用数据池的方法*/
 	
+/*用户登录的方法*/	
 	public static User findUser(String key) throws NotFoundException
 	{
 		auser=null;
@@ -45,4 +46,28 @@ public class UserDA {
 		}
 		return auser;
 	}
+	
+/*用户注册的方法*/	
+	public static void addUser(String username,String password) throws DuplicateException
+	{
+		User buser=null;
+		auser=null;
+		String sql = "insert into newsuser(username,password) values('"+username+"','"+password+"');";
+		try
+		{
+			buser=UserDA.findUser(username);
+		}
+		catch(NotFoundException e)
+		{
+			try
+			{
+				st.executeUpdate(sql);
+			}
+			catch(SQLException ee)
+			{
+				System.out.println(ee);
+			}
+		}
+	}
 }
+	
