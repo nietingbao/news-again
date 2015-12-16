@@ -6,6 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+
 /*连接连接数据库的操作*/
 public class UserDA {
 	static User auser=null;
@@ -19,6 +23,24 @@ public class UserDA {
 	
 	
 /*这里是数据库的初始化以及关闭数据库的函数，准备使用数据池的方法*/
+	
+/*从数据源中获得数据库连接，用JNDI来获得DataSource对象的引用*/
+/*连接数据库*/
+	public static Connection getConnection()
+	{
+		try
+		{
+			//Context是java.name包中一个借口，用于查找数据库连接池的配置文件
+			Context ctx = new InitialContext();
+			ctx=(Context) ctx.lookup("java:comp/env");
+			DataSource ds = (DataSource)ctx.lookup("DataPool");
+			con=ds.getConnection();
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return con;
+	}
 	
 /*用户登录的方法*/	
 	public static User findUser(String key) throws NotFoundException
